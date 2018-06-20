@@ -9,26 +9,89 @@ and open the template in the editor.
         <title>Poker Game</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-        <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
-        <link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+        <link rel="stylesheet" href="http://cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+        <link rel="stylesheet" href="http://cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+        <link rel="stylesheet" href="index.css">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     </head>
     <body>
-        <div class="container">
+        <main class="wrapper">
+            <section class="navigation">
+                <a href="//www.iqmetrix.com" id="hs-link-module_14440575361011954" style="border-width:0px;border:0px;">
+                    <img src="https://www.iqmetrix.com/hs-fs/hubfs/Retina-Logo.png?t=1529507441522&amp;width=200&amp;name=Retina-Logo.png" class="hs-image-widget " style="width:200px;border-width:0px;border:0px;" width="200" alt="iQmetrix logo" title="iQmetrix logo" srcset="https://www.iqmetrix.com/hs-fs/hubfs/Retina-Logo.png?t=1529507441522&amp;width=100&amp;name=Retina-Logo.png 100w, https://www.iqmetrix.com/hs-fs/hubfs/Retina-Logo.png?t=1529507441522&amp;width=200&amp;name=Retina-Logo.png 200w, https://www.iqmetrix.com/hs-fs/hubfs/Retina-Logo.png?t=1529507441522&amp;width=300&amp;name=Retina-Logo.png 300w, https://www.iqmetrix.com/hs-fs/hubfs/Retina-Logo.png?t=1529507441522&amp;width=400&amp;name=Retina-Logo.png 400w, https://www.iqmetrix.com/hs-fs/hubfs/Retina-Logo.png?t=1529507441522&amp;width=500&amp;name=Retina-Logo.png 500w, https://www.iqmetrix.com/hs-fs/hubfs/Retina-Logo.png?t=1529507441522&amp;width=600&amp;name=Retina-Logo.png 600w" sizes="(max-width: 200px) 100vw, 200px">
+                </a>
+            </section>
+            <section class="container">
+                <div class="row">
+                    <div class="column">
+                        <h3>Welcome to a classic poker text game</h3>
+                        <p>Let's start with you telling me how many people are playing this game?</p>
+                        <div class="row">
+                            <div class="column">
+                                <input type="number" placeholder="Min: 2, max: 10" step="1" min="2" max="10" id="nplayers"> 
+                            </div>
+                            <div class="column">
+                                <a class="button" onclick="createRoom()" href="#">Create Room</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            </section>
 
-            <div class="row">
-                <div class="column">.column</div>
-                <div class="column">.column</div>
-                <div class="column">.column</div>
-                <div class="column">.column</div>
-            </div>
+            <section class="container" id="gameRules" style="display: none;">
+                <div class="row">
+                    <div class="column">
+                        <p><b>Terminology:</b> Cards have a suit and a number (called the value or rank). The possible suits are hearts
+                            (H), clubs (C), spades (S), and diamonds (D). The possible ranks are 2, 3, 4, 5, 6, 7, 8, 9,10, Jack (J),
+                            Queen (Q), King (K), and Ace (A).</p>
 
-            <div class="row">
-                <div class="column">.column</div>
-                <div class="column column-50 column-offset-25">.column column-50 column-offset-25</div>
-            </div>
+                        <blockquote>
+                            <p><em>Input example:</em></p>
+                            <ul>
+                                <li><em>Joe | 3H, 4H, 5H, 6H, 8H</em></li>
+                                <li><em>Bob, 3C, 3D, 3S, 8C, 10D</em></li>
+                                <li><em>Sally, AC, 10C, 5C, 2S, 2C</em></li>
+                            </ul>
+                        </blockquote>
+                    </div>
+                </div>
+                <hr />
+            </section>
 
-        </div>
+            <section class="container" id="newroom" style="display: none;">
+                <div class="row">
+                    <div class="column">
+                        <form name="game" id="game" enctype="application/x-www-form-urlencoded" method="post" action="index.html"></form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column" id="result"></div>
+                </div>
+            </section>
+
+            <section class="container" id="gamePoints" style="display: none;">
+                <div class="row">
+                    <div class="column">
+                        <p><b>Poker hands:</b> The following are the poker hands, from best to worst:</p>
+                        <ul>
+                            <li><b>Straight flush:</b> Five cards of the same suit in sequence (if those five are A, K, Q, J, 10; it is a <b>Royal Flush</b>)</li>
+                            <li><b>Four of a kind:</b> Four cards of the same rank, and any one other card</li>
+                            <li><b>Full house:</b> Three cards of one rank and two of another</li>
+                            <li><b>Flush:</b> Five cards of the same suit</li>
+                            <li><b>Straight:</b> Five cards in sequence (for example, 4, 5, 6, 7, 8), but not all of the same suit</li>
+                            <li><b>Three of a kind:</b> Three cards of the same rank</li>
+                            <li><b>Two pair:</b> Two cards of one rank and two cards of another</li>
+                            <li><b>One pair:</b> Two cards of the same rank</li>
+                            <li><b>High card:</b> If no one has one pair or a better hand, the highest card wins</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+        <script src="poker.js"></script>
+        <script src="index.js"></script>
     </body>
 </html>

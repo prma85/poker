@@ -4,4 +4,10 @@
  * and open the template in the editor.
  */
 
-
+class Poker {
+    checkWinner (game){
+        var size = game.length;
+        console.log(size);
+        alert(game);
+    }
+}
