@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 
+//names for the ranon function
+var names = ["Vader", "Yoda", "Obi-Wan", "Anakin", "Jon Snow", "Aria", "Padme", "Leia", "Neo", "Lara Croft"];
+
 function createRoom() {
     //get the number of players in the game to create the room and setting that it is a decimal number
     var nplayers = parseInt($("#nplayers").val(), 10);
@@ -24,7 +27,20 @@ function createRoom() {
 
     //adding the html and inputs in the form
     $("#game").html(html);
-    $("#game").submit(checkWinner);
+    $("#submit").on("click",checkWinner);
+
+    //do not lose time and deal the cards randomly
+    $("#dealcards").on("click", function (event) {
+        event.preventDefault();
+
+        var cards = Poker.randomGame(nplayers);
+        //console.log(cards);
+        for (var i = 0; i < nplayers; i++) {
+            var j = i+1;
+            $("#player_"+j).val(names[i]);
+            $("#player_cards_"+j).val(cards[i]);
+        }
+    });
 
 
     //show the hidden form
@@ -60,7 +76,8 @@ function generateRoomHTML(n) {
         html += '</fieldset>';
     }
 
-    html += '<input class="button-primary" type="submit" value="Check winner">';
+    html += '<a href="#" class="button button-outline" id="dealcards">Deal cards randomly</a>';
+    html += '<a href="#" class="button button-primary" id="submit">Check winner</a>';
 
     return html;
 }
@@ -68,11 +85,12 @@ function generateRoomHTML(n) {
 function checkWinner(event) {
     event.preventDefault();
     $("#notice").hide();
-    
-    var game = $('#' + event.target.id).serializeArray();
-    if (Poker.playGame(game)) {
+
+    var game = $('#game').serializeArray();
+    if (Poker.start(game)) {
         //show how to score in the game
         $("#gamePoints").show();
+        return true;
     } else {
         $("#notice").show();
         return false;

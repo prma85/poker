@@ -7,6 +7,7 @@
 var Poker = {
     room: new Array(),
     winner: new Array(),
+    highest: 0,
 
     //these 2 variables will be used to check if 2 or more players have the same card;
     allGameCards: new Array(),
@@ -30,18 +31,26 @@ var Poker = {
         9: "royal flush"
     },
 
-    playGame: function (val) {
-        //get the number of players
-        var size = (val.length) / 2;
-
-
+    reset: function () {
         //initialize variables
         Poker.room = new Array();
         Poker.winner = [[], [], [], [], [], [], [], [], [], []]; //create the array to save winners
+        Poker.highest = 0;
         Poker.allGameCards = new Array();
 
+    },
+
+    start: function (game) {
+        //get the number of players
+        var size = (game.length) / 2;
+
+        console.log("number of variables: " + game.length + " and numeber of players: " + size);
+        Poker.reset();
+
+        console.log("game started");
+
         //check the game
-        if (Poker.checkValidGame(val, size)) {
+        if (Poker.checkValidGame(game, size)) {
             console.log(Poker.room);
             console.log(Poker.winner);
 
@@ -66,43 +75,45 @@ var Poker = {
         var msg = "";
 
         //run each hand to see if the player have 5 cards
-        for (var i = 0; i <= n + 2; i += 2) {
+        for (var i = 1; i <= n; i++) {
+            //creating indexes
+            var k = (i * 2) - 1;
+            var j = k - 1;
+
             //get individual cards
-            var cards = game[i + 1].value.split(',');
+            var cards = game[k].value.split(',');
             var nCards = cards.length;
 
             //validation
             if (nCards < 5) {
-                msg += "The player " + game[i].value + " has less than 5 cards \n";
+                msg += "The player " + game[j].value + " has less than 5 cards \n";
                 valid = false;
             } else if (nCards < 5) {
-                msg += "The player " + game[i].value + " has more than 5 cards \n";
+                msg += "The player " + game[j].value + " has more than 5 cards \n";
                 valid = false;
             } else {
                 //add the hand and check if there is any game
-                let player = {};
-                player.name = game[i].value;
-                player.hand = cards;
-                var newCards = Poker.checkPlayerGame(game[i].value, cards);
+                let playerObj = {};
+                playerObj.name = game[j].value;
+                playerObj.hand = cards;
+
+                //verifies if the player has valid cards
+                var newCards = Poker.checkPlayerGame(playerObj.name, cards);
+                //if there is a invalid card or repeated card, stop the game
                 if (!newCards) {
                     return false;
                 }
-                player.handTemp = newCards;
-                player.gameNun = Poker.checkHand(newCards);
-                player.game = Poker.GAME[player.gameNun];
+
+                playerObj.handTemp = newCards;
+                playerObj.gameNun = Poker.checkHand(playerObj.name, newCards);
+                playerObj.game = Poker.GAME[playerObj.gameNun];
 
                 //console.log(player);
 
                 //add the player to the game
-                Poker.room.push(player);
-                ;
-                Poker.winner[player.gameNun].push(player.name);
+                Poker.room.push(playerObj);
             }
-
         }
-
-
-
         //if is there anyone withou 5 cards, stop the game and send the alert
         if (!valid) {
             alert(msg);
@@ -144,13 +155,16 @@ var Poker = {
         return newCards;
     },
 
-    checkHand: function (cards) {
+    checkHand: function (player, cards) {
+        //console.log(player, cards);
+
         var hand = 0;
-        var pairs = 0, threes = 0, fours = 0;
-        var flush = false, straight = false;
+        var pairs = 0, threes = 0, fours = 0, highest = 0;
+        var flush = false, straight = false, addWinnwer = true;
 
         //will help to check for a flush
         var suits = [0, 0, 0, 0];
+
         //will help to check for pairs, threes, fours
         var sames = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -167,13 +181,21 @@ var Poker = {
             //have an array without suites
             newCardsNumbers[i] = cardNumber;
             //update matched for cards
-            sames[cardNumber]++;
+            sames[cardNumber-1]++;
             //update suits for cards
             suits[cardSuite]++;
         }
 
         //fixing JS ordering bug when has number and letters (10S, AS ==> 10S, 1S)
         newCardsNumbers.sort(Poker.sorter);
+        //console.log(newCardsNumbers);
+
+        //verifies the higest card, and if is a Ace or not
+        if (newCardsNumbers[0] == 1) {
+            highest = 14;
+        } else {
+            highest = newCardsNumbers[4];
+        }
 
         //check for pairs, threes and fours
         for (var i = 0; i < 13; i++) {
@@ -203,7 +225,10 @@ var Poker = {
             } else {
                 hand = 4;
             }
-        } else if (newCardsNumbers[4] - newCardsNumbers[0] === 4) { //check for straight and straight flush (sequence)
+        } else if (newCardsNumbers[4] - newCardsNumbers[0] === 4 &&
+                newCardsNumbers[4] - newCardsNumbers[1] === 3 &&
+                newCardsNumbers[4] - newCardsNumbers[2] === 2 && 
+                newCardsNumbers[4] - newCardsNumbers[2] === 1) { //check for straight and straight flush (sequence)
             if (flush) {
                 hand = 8;
             } else {
@@ -221,8 +246,23 @@ var Poker = {
             hand = 2;
         } else if (pairs === 1) {
             hand = 1;
+        } else {
+            addWinnwer = false;
+            //in the case of highest card
+            if (highest > Poker.highest) {
+                Poker.highest = highest;
+                Poker.winner[0] = new Array();
+                Poker.winner[0].push(player);
+            } else if (highest == Poker.highest) {
+                Poker.winner[0].push(player);
+            }
+
         }
 
+        //add in the winner list according with the game (excepts for highest cards
+        if (addWinnwer) {
+            Poker.winner[hand].push(player);
+        }
         return hand;
 
     },
@@ -347,7 +387,27 @@ var Poker = {
         }
         return value;
     },
-    
+
+    //auto fill the player's card for a faster test
+    randomGame: function (nPlayers) {
+        var tempCards = Object.values(Poker.CARDSREV);
+        var selectedCards = new Array(nPlayers);
+
+        for (var i = 0; i < nPlayers; i++) {
+            var handCards = "";
+            for (var j = 0; j < 5; j++) {
+                handCards += tempCards.sort(function () {
+                    return 0.5 - Math.random();
+                }).pop();
+                if (j < 4) {
+                    handCards += ", ";
+                }
+            }
+            selectedCards[i] = handCards.toUpperCase();
+        }
+        Poker.reset();
+        return selectedCards;
+    },
 
     //used to generate CARDSREV from CARDS
     swap: function (json) {
