@@ -76,8 +76,14 @@ function generateRoomHTML(n) {
         html += '</fieldset>';
     }
 
+    html += '<div class="row" style="text-align: center">';
+    html += '<div class="column">';
     html += '<a href="#" class="button button-outline" id="dealcards">Deal cards randomly</a>';
+    html += '</div>';
+    html += '<div class="column">';
     html += '<a href="#" class="button button-primary" id="submit">Check winner</a>';
+    html += '</div>';
+    html += '</div>';
 
     return html;
 }
