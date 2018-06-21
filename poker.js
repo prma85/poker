@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -8,6 +8,7 @@ var Poker = {
     room: new Array(),
     winner: new Array(),
     highest: 0,
+    allhands: 1,
 
     //these 2 variables will be used to check if 2 or more players have the same card;
     allGameCards: new Array(),
@@ -37,17 +38,20 @@ var Poker = {
         Poker.winner = [[], [], [], [], [], [], [], [], [], []]; //create the array to save winners
         Poker.highest = 0;
         Poker.allGameCards = new Array();
+        Poker.allhands = 1;
 
     },
 
-    start: function (game) {
+    start: function (game, all) {
         //get the number of players
         var size = (game.length) / 2;
 
         console.log("number of variables: " + game.length + " and numeber of players: " + size);
         Poker.reset();
 
-        console.log("game started");
+        Poker.allhands = all;
+
+        console.log("game started / all hands:" + Poker.allhands);
 
         //check the game
         if (Poker.checkValidGame(game, size)) {
@@ -219,8 +223,9 @@ var Poker = {
 
         //check for Royal Flush (10, J=12, Q=12, K=13, A=1)
         if (newCardsNumbers[4] - newCardsNumbers[1] === 3 && //checking 10, J, Q, K / sequence
-                newCardsNumbers[4] - newCardsNumbers[2] === 2 && 
-                newCardsNumbers[4] - newCardsNumbers[0] === 12) { //checking for K and A
+                newCardsNumbers[4] - newCardsNumbers[2] === 2 &&
+                newCardsNumbers[4] - newCardsNumbers[0] === 12 &&
+                Poker.allhands == 1) { //checking for K and A
             if (flush) {
                 hand = 9;
             } else {
@@ -228,24 +233,25 @@ var Poker = {
             }
         } else if (newCardsNumbers[4] - newCardsNumbers[0] === 4 &&
                 newCardsNumbers[4] - newCardsNumbers[1] === 3 &&
-                newCardsNumbers[4] - newCardsNumbers[2] === 2 && 
-                newCardsNumbers[4] - newCardsNumbers[3] === 1) { //check for straight and straight flush (sequence)
+                newCardsNumbers[4] - newCardsNumbers[2] === 2 &&
+                newCardsNumbers[4] - newCardsNumbers[3] === 1 &&
+                Poker.allhands == 1) { //check for straight and straight flush (sequence)
             if (flush) {
                 hand = 8;
             } else {
                 hand = 4;
             }
-        } else if (fours === 1) {
+        } else if (fours === 1 && Poker.allhands == 1) {
             hand = 7;
-        } else if (threes === 1 && pairs === 1) {
+        } else if (threes === 1 && pairs === 1 && Poker.allhands == 1) {
             hand = 6;
         } else if (flush) {
             hand = 5;
         } else if (threes === 1) {
             hand = 3;
-        } else if (pairs === 2) {
+        } else if (pairs === 2 && Poker.allhands == 1) {
             hand = 2;
-        } else if (pairs === 1) {
+        } else if (pairs === 1 || pairs === 2 ) {
             hand = 1;
         } else {
             addWinnwer = false;

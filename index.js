@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -6,6 +6,13 @@
 
 //names for the ranon function
 var names = ["Vader", "Yoda", "Obi-Wan", "Anakin", "Jon Snow", "Aria", "Padme", "Leia", "Neo", "Lara Croft"];
+var allhands = 1;
+
+$(document).ready(function() {
+    $('input[type=radio][name=allhands]').change(function() {
+      allhands = this.value;
+    });
+});
 
 function createRoom() {
     //get the number of players in the game to create the room and setting that it is a decimal number
@@ -93,7 +100,7 @@ function checkWinner(event) {
     $("#notice").hide();
 
     var game = $('#game').serializeArray();
-    if (Poker.start(game)) {
+    if (Poker.start(game, allhands)) {
         //show how to score in the game
         $("#gamePoints").show();
         return true;
