@@ -160,7 +160,7 @@ var Poker = {
 
         var hand = 0;
         var pairs = 0, threes = 0, fours = 0, highest = 0;
-        var flush = false, straight = false, addWinnwer = true;
+        var flush = false, addWinnwer = true;
 
         //will help to check for a flush
         var suits = [0, 0, 0, 0];
@@ -219,6 +219,7 @@ var Poker = {
 
         //check for Royal Flush (10, J=12, Q=12, K=13, A=1)
         if (newCardsNumbers[4] - newCardsNumbers[1] === 3 && //checking 10, J, Q, K / sequence
+                newCardsNumbers[4] - newCardsNumbers[2] === 2 && 
                 newCardsNumbers[4] - newCardsNumbers[0] === 12) { //checking for K and A
             if (flush) {
                 hand = 9;
@@ -228,7 +229,7 @@ var Poker = {
         } else if (newCardsNumbers[4] - newCardsNumbers[0] === 4 &&
                 newCardsNumbers[4] - newCardsNumbers[1] === 3 &&
                 newCardsNumbers[4] - newCardsNumbers[2] === 2 && 
-                newCardsNumbers[4] - newCardsNumbers[2] === 1) { //check for straight and straight flush (sequence)
+                newCardsNumbers[4] - newCardsNumbers[3] === 1) { //check for straight and straight flush (sequence)
             if (flush) {
                 hand = 8;
             } else {
