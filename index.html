@@ -1,15 +1,9 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>Poker Game</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
         <link rel="stylesheet" href="http://cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
         <link rel="stylesheet" href="http://cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
         <link rel="stylesheet" href="index.css">
@@ -29,7 +23,7 @@ and open the template in the editor.
                         <p>Let's start with you telling me how many people are playing this game?</p>
                         <div class="row">
                             <div class="column">
-                                <input type="number" placeholder="Min: 2, max: 10" step="1" min="2" max="10" id="nplayers">
+                                <input type="number" placeholder="Min: 2, max: 10" step="1" min="2" max="10" id="nPlayers">
                             </div>
                           </div>
                           <div class="row">
@@ -72,7 +66,17 @@ and open the template in the editor.
                 <div class="row">
                     <div class="column">
                         <pre class="code prettyprint prettyprinted" id="notice" style="display: none;"><code class="code-content"><span class="kwd">You have a invalid game. Check the cards and try again!</span></code></pre>
-                        <form name="game" id="game" enctype="application/x-www-form-urlencoded" method="post" action="index.html"></form>
+                        <form name="game" id="game" enctype="application/x-www-form-urlencoded" method="post" action="index.html">
+                          <div id="newroom_content"></div>
+                          <div class="row" style="text-align: center">
+                            <div class="column">
+                              <a href="#" class="button button-outline" id="dealcards">Deal cards randomly</a>
+                            </div>
+                            <div class="column">
+                              <a href="#" class="button button-primary" id="submit">Check winner</a>
+                            </div>
+                          </div>
+                        </form>
                     </div>
                 </div>
                 <div class="row">

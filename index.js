@@ -1,59 +1,40 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-//names for the ranon function
-var names = ["Vader", "Yoda", "Obi-Wan", "Anakin", "Jon Snow", "Aria", "Padme", "Leia", "Neo", "Lara Croft"];
-var allhands = 1;
-
+//event listeners for once the page was loaded
 $(document).ready(function() {
+    //update the type of hands used in every change
     $('input[type=radio][name=allhands]').change(function() {
-      allhands = this.value;
+      Poker.allhands = this.value;
     });
-});
 
-function createRoom() {
-    //get the number of players in the game to create the room and setting that it is a decimal number
-    var nplayers = parseInt($("#nplayers").val(), 10);
-    console.log("Number of players " + nplayers);
-
-    //doing the validation for number of players
-    if (nplayers < 2 || !$("#nplayers").val()) {
-        alert("You need at least 2 players to play this game");
-        return false;
-    } else if (nplayers > 10) {
-        alert("Let focus in a game with 10 players or less ;)");
-        return false;
-    }
-
-    //creating the room (players and cards inputs)
-    var html = generateRoomHTML(nplayers);
-    //console.log(html);
-
-    //adding the html and inputs in the form
-    $("#game").html(html);
+    //on subit function for the game
     $("#submit").on("click",checkWinner);
 
     //do not lose time and deal the cards randomly
     $("#dealcards").on("click", function (event) {
         event.preventDefault();
-
-        var cards = Poker.randomGame(nplayers);
-        //console.log(cards);
-        for (var i = 0; i < nplayers; i++) {
-            var j = i+1;
-            $("#player_"+j).val(names[i]);
-            $("#player_cards_"+j).val(cards[i]);
-        }
+        Poker.createRandomGame(nPlayers);
     });
+});
 
+//get the number of players in the game to create the room and setting that it is a decimal number
+function createRoom() {
+    var nPlayers = parseInt($("#nPlayers").val(), 10);
+    console.log("Number of players " + nPlayers);
 
-    //show the hidden form
+    //doing the validation for number of players
+    if (nPlayers < 2 || !$("#nPlayers").val()) {
+        alert("You need at least 2 players to play this game");
+        return false;
+    } else if (nPlayers > 10) {
+        alert("Let focus in a game with 10 players or less ;)");
+        return false;
+    }
+
+    //creating the room (players and cards inputs)
+    var html = generateRoomHTML(nPlayers);
+    $("#newroom_content").html(html);
+
+    //show the hidden form and game rules
     $("#newroom").show();
-
-    //show the game rules to play
     $("#gameRules").show();
 }
 
@@ -83,15 +64,6 @@ function generateRoomHTML(n) {
         html += '</fieldset>';
     }
 
-    html += '<div class="row" style="text-align: center">';
-    html += '<div class="column">';
-    html += '<a href="#" class="button button-outline" id="dealcards">Deal cards randomly</a>';
-    html += '</div>';
-    html += '<div class="column">';
-    html += '<a href="#" class="button button-primary" id="submit">Check winner</a>';
-    html += '</div>';
-    html += '</div>';
-
     return html;
 }
 
@@ -100,7 +72,7 @@ function checkWinner(event) {
     $("#notice").hide();
 
     var game = $('#game').serializeArray();
-    if (Poker.start(game, allhands)) {
+    if (Poker.start(game)) {
         //show how to score in the game
         $("#gamePoints").show();
         return true;

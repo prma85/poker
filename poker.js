@@ -1,22 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 var Poker = {
     room: new Array(),
     winner: new Array(),
     highest: 0,
     allhands: 1,
 
-    //these 2 variables will be used to check if 2 or more players have the same card;
+    //these 3 variables will be used to check if 2 or more players have the same card;
     allGameCards: new Array(),
     CARDS: {"2c": 1, "2d": 2, "2h": 3, "2s": 4, "3c": 5, "3d": 6, "3h": 7, "3s": 8, "4c": 9, "4d": 10, "4h": 11, "4s": 12, "5c": 13, "5d": 14, "5h": 15, "5s": 16, "6c": 17, "6d": 18, "6h": 19, "6s": 20, "7c": 21, "7d": 22, "7h": 23, "7s": 24, "8c": 25, "8d": 26, "8h": 27, "8s": 28, "9c": 29, "9d": 30, "9h": 31, "9s": 32, "10c": 33, "10d": 34, "10h": 35, "10s": 36, jc: 37, jd: 38, jh: 39, js: 40, qc: 41, qd: 42, qh: 43, qs: 44, kc: 45, kd: 46, kh: 47, ks: 48, ac: 49, ad: 50, ah: 51, as: 52},
     CARDSREV: {1: "2c", 2: "2d", 3: "2h", 4: "2s", 5: "3c", 6: "3d", 7: "3h", 8: "3s", 9: "4c", 10: "4d", 11: "4h", 12: "4s", 13: "5c", 14: "5d", 15: "5h", 16: "5s", 17: "6c", 18: "6d", 19: "6h", 20: "6s", 21: "7c", 22: "7d", 23: "7h", 24: "7s", 25: "8c", 26: "8d", 27: "8h", 28: "8s", 29: "9c", 30: "9d", 31: "9h", 32: "9s", 33: "10c", 34: "10d", 35: "10h", 36: "10s", 37: "jc", 38: "jd", 39: "jh", 40: "js", 41: "qc", 42: "qd", 43: "qh", 44: "qs", 45: "kc", 46: "kd", 47: "kh", 48: "ks", 49: "ac", 50: "ad", 51: "ah", 52: "as"},
+
     //used to set values for suites
     SUITES: {"h": 0, "c": 1, "s": 2, "d": 3},
     SUITESREV: {0: "h", 1: "c", 2: "s", 3: "d"},
+
+    //names for the randon function
+    names: ["Vader", "Yoda", "Obi-Wan", "Anakin", "Jon Snow", "Aria", "Padme", "Leia", "Neo", "Lara Croft"],
+
 
     //used to determine the winner
     GAME: {
@@ -38,18 +37,19 @@ var Poker = {
         Poker.winner = [[], [], [], [], [], [], [], [], [], []]; //create the array to save winners
         Poker.highest = 0;
         Poker.allGameCards = new Array();
-        Poker.allhands = 1;
+        //Poker.allhands = 1;
 
     },
 
-    start: function (game, all) {
+    //start: function (game, all) {
+    start: function (game) {
         //get the number of players
         var size = (game.length) / 2;
 
         console.log("number of variables: " + game.length + " and numeber of players: " + size);
         Poker.reset();
 
-        Poker.allhands = all;
+        //Poker.allhands = all;
 
         console.log("game started / all hands:" + Poker.allhands);
 
@@ -395,23 +395,41 @@ var Poker = {
         return value;
     },
 
+    createRandomGame: function (nPlayers){
+      var cards = Poker.randomGame(nPlayers);
+      //console.log(cards);
+
+      //fill the information with name and cards
+      for (var i = 0; i < nPlayers; i++) {
+          var j = i+1;
+          $("#player_"+j).val(Poker.names[i]);
+          $("#player_cards_"+j).val(cards[i]);
+      }
+    },
+
     //auto fill the player's card for a faster test
     randomGame: function (nPlayers) {
+        //get only the values of the object cards
         var tempCards = Object.values(Poker.CARDSREV);
         var selectedCards = new Array(nPlayers);
 
+        //check the nunber of players to creat a array with cards
         for (var i = 0; i < nPlayers; i++) {
             var handCards = "";
+            //select 5 cards from the deck
             for (var j = 0; j < 5; j++) {
+                //select a random card and remove it from the deck
                 handCards += tempCards.sort(function () {
                     return 0.5 - Math.random();
                 }).pop();
+                //just separe the cards by ,
                 if (j < 4) {
                     handCards += ", ";
                 }
             }
             selectedCards[i] = handCards.toUpperCase();
         }
+        //restart the game (set default values)
         Poker.reset();
         return selectedCards;
     },
