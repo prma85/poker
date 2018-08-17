@@ -1,4 +1,5 @@
 //event listeners for once the page was loaded
+let nPlayers = 0;
 $(document).ready(function() {
     //update the type of hands used in every change
     $('input[type=radio][name=allhands]').change(function() {
@@ -17,7 +18,7 @@ $(document).ready(function() {
 
 //get the number of players in the game to create the room and setting that it is a decimal number
 function createRoom() {
-    var nPlayers = parseInt($("#nPlayers").val(), 10);
+    nPlayers = parseInt($("#nPlayers").val(), 10);
     console.log("Number of players " + nPlayers);
 
     //doing the validation for number of players
@@ -30,7 +31,7 @@ function createRoom() {
     }
 
     //creating the room (players and cards inputs)
-    var html = generateRoomHTML(nPlayers);
+    const html = generateRoomHTML(nPlayers);
     $("#newroom_content").html(html);
 
     //show the hidden form and game rules
@@ -39,10 +40,10 @@ function createRoom() {
 }
 
 function generateRoomHTML(n) {
-    var html = '';
+    let html = '';
 
     //creating the inputs for each player
-    for (var i = 1; i <= n; i++) {
+    for (let i = 1; i <= n; i++) {
         html += '<fieldset>';
         html += '<legend>Player' + i + '</legend>';
         html += '<div class="row">';
@@ -71,7 +72,7 @@ function checkWinner(event) {
     event.preventDefault();
     $("#notice").hide();
 
-    var game = $('#game').serializeArray();
+    const game = $('#game').serializeArray();
     if (Poker.start(game)) {
         //show how to score in the game
         $("#gamePoints").show();
